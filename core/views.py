@@ -4,8 +4,8 @@ from django.core.urlresolvers import reverse_lazy
 from .models import *
 
 # Create your views here.
-class Home (TemplateView):
-  template_name = "home.html"
+class Home(TemplateView):
+    template_name = "home.html"
   
 class QuestionCreateView(CreateView):
     model = Question
