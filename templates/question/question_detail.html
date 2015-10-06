@@ -17,7 +17,7 @@
   <p><a href="{% url 'answer_update' question_pk=question.id answer_pk=answer.id %}">Edit answer</a></p>
   <p><a href="{% url 'answer_delete' question_pk=question.id answer_pk=answer.id %}">Delete answer</a></p>
   {% endif %}
-  <p>Answered by {{ answer.user.username }} on {{ answer.create_at }}</p>
+  <p>Answered by {{ answer.user.username }} on {{ answer.created_at }}</p>
 </div>
 {% endfor %}
 <p><a href="{% url 'answer_create' pk=question.id %}">Write answer</a></p>
