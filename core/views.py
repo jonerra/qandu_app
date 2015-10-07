@@ -82,7 +82,7 @@ class AnswerUpdateView(UpdateView):
 
     def get_success_url(self):
       return self.object.question.get_absolute_url()
-    
+
     def get_object(self, *args, **kwargs):
       object = super(AnswerUpdateView, self).get_object(*args, **kwargs)
       if object.user != self.request.user:
@@ -96,23 +96,33 @@ class AnswerDeleteView(DeleteView):
 
     def get_success_url(self):
       return self.object.question.get_absolute_url()
-    
+
     def get_object(self, *args, **kwargs):
       object = super(AnswerDeleteView, self).get_object(*args, **kwargs)
       if object.user != self.request.user:
         raise PermissionDenied()
       return object
-    
+
 class VoteFormView(FormView):
   form_class = VoteForm
-  
+
   def form_valid(self, form):
     user = self.request.user
     question = Question.objects.get(pk=form.data["question"])
-    prev_votes = Vote.objects.filter(user=user, question=question)
-    has_voted = (prev_votes.count()>0)
-    if not has_voted:
-      Vote.objects.create(user=user, question=question)
-    else:
-      prev_votes[0].delete()
+    try:
+      answer = Answer.objects.get(pk=form.data["answer"])
+      prev_votes = Vote.objects.filter(user=user, answer=answer)
+      has_voted = (prev_votes.count()>0)
+      if not has_voted:
+        Vote.objects.create(user=user, answer=answer)
+      else:
+        prev_votes[0].delete()
+      return redirect(reverse('question_detail', args=[form.data["question"]]))
+    except:
+      prev_votes = Vote.objects.filter(user=user, question=question)
+      has_voted = (prev_votes.count()>0)
+      if not has_voted:
+        Vote.objects.create(user=user, question=question)
+      else:
+        prev_votes[0].delete()
     return redirect('question_list')
