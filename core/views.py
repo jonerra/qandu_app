@@ -41,7 +41,7 @@ class QuestionDetailView(DetailView):
       context['answers'] = answers
       user_answers = Answer.objects.filter(question=question, user=self.request.user)
       context['user_answers'] = user_answers
-      user_votes = Answer.objects.filters(vote__user=self.request.user)
+      user_votes = Answer.objects.filter(vote__user=self.request.user)
       context['user_votes'] = user_votes
       return context
 
